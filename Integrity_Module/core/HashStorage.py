@@ -19,11 +19,11 @@ class HashStorage:
             buffer_size=65536 #64 kb
             with open (file_path, "rb") as f:
                 while True:
-                    data=f.read(buffer_size)
+                    data=f.read(buffer_size) #Leer exactamente 64 kb del archivo. En cada iteracion se reemplazan datos.
                     if not data:
                         break
-                    hash.update(data)
-            hash=hash.hexdigest()
+                    hash.update(data) #Cargar datos leidos a la funcion.
+            hash=hash.hexdigest() #Decodificacion del hash en texto plano
             return hash
         except Exception as e:
             print(f"Error al almacenar el hash fdfd: {e}")
@@ -121,7 +121,7 @@ class HashStorage:
                 full_file_info=self.file_handler.extract_file_info(path)
                 inode=full_file_info[0]
                 device=full_file_info[1]
-                self.db_manager.update_hash(inode,hash,device,path)
+                self.db_manager.update_hash(hash, inode, device)
                 return True
             else:
                 print("\nEl hash estaba vacio y levante el error 1\n")
@@ -177,9 +177,8 @@ class HashStorage:
                     file_path=hash_tuple[0]
                     full_file_info=self.file_handler.extract_file_info(file_path)
                     inode=full_file_info[0]
-                    if not (self.db_manager.consult_file_existence(inode)):
-                        print(f"\n[-] No se pudo calcular el hash para el archivo {inode} ya que archivo no existe\n")
-                        return False  # Solo falla aquí si encuentra un archivo inexistente
+                    if (self.db_manager.consult_file_existence(inode)):
+                        print(f"\n[-] El archivo {inode} ya existe en la DB\n")
                 return True
         
         

@@ -20,9 +20,9 @@ class FileIntegritySystem:
         while True:
             self.db_manager.set_DB()
             print("Bienvenido al sistema de integridad de archivos")
-            print("1. Almacenar un nuevo archivo")
-            print("2. Verificar el hash de un archivo")
-            print("3. Actualizar el hash de un archivo")
+            print("1. Almacenar hash")
+            print("2. Verificar hash")
+            print("3. Actualizar hash")
             print("4. Cambiar algoritmo de hashing utilizado")
             print("5. Generar reporte")
             print("6. Salir")
