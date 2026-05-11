@@ -1,0 +1,9 @@
+{
+    "Event Type": "MODIFIED",
+    "Inode": 1310922,
+    "Device": "1796",
+    "old_hash": "f6a4f817ebc9c7e4765004c1cda4f6028429ed089529c9f7148d60b392905617",
+    "new_hash": "9018a462524b4e50a441c90c8ae4952a4e25a41282e68945a7bdf82026321106",
+    "file_path": "/workspaces/toolkitTCU/Integrity_Module/prueba.txt",
+    "timestamp": "2026-05-06 07:47:57"
+}
