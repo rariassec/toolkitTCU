@@ -2,7 +2,6 @@
 import os
 import hashlib
 import sqlite3
-from core.HashStorage import HashStorage
 
 class FileHandler:
     
@@ -50,7 +49,7 @@ class FileHandler:
                 new_all_files.append(full_path)
         
         for path_item in new_all_files:
-            hash=HashStorage.calculate_file_hash(path_item)
+            hash=self.calculate_file_hash(path_item)
             full_data_hash=(path_item,hash)
             all_hashes.append(full_data_hash)
         print(all_hashes)

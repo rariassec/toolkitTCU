@@ -30,7 +30,9 @@ class FileIntegritySystem:
 
             if opcion==1:
                 path=input("Ingrese la ruta del archivo a almacenar: ")
-                if(self.hash_storage.consult_path_hash_existence_in_db(path) == False):
+                path_existence=self.hash_storage.consult_path_hash_existence_in_db(path)
+                print(path_existence)
+                if(self.hash_storage.consult_path_hash_existence_in_db(path) == False or self.hash_storage.consult_path_hash_existence_in_db(path) == []):
                     self.hash_storage.store_hash(path)
                     print(f"\n[+] El hash se ha guardado correctamente\n")
                     self.event_manager.generate_creation_event(path)

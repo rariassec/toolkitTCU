@@ -1,13 +1,13 @@
-import sqlite3
 import hashlib  
 import os
-import json
 from datetime import datetime
+from core.DatabaseManager import DatabaseManager
+from  utils.FileHandler import FileHandler
 
 class HashStorage:
 
     """CLASE PARA MANEJAR EL ALMACENAMIENTO DE HASHES"""
-    def __init__(self, db_manager, file_handler):
+    def __init__(self, db_manager: DatabaseManager, file_handler: FileHandler):
         self.db_manager = db_manager
         self.file_handler = file_handler
         self.hashing_algorithm = "sha256"
@@ -26,7 +26,7 @@ class HashStorage:
             hash=hash.hexdigest() #Decodificacion del hash en texto plano
             return hash
         except Exception as e:
-            print(f"Error al almacenar el hash fdfd: {e}")
+            print(f"\n[-] Error al almacenar el hash: {e}\n")
             return ""
         
     def store_hash(self, input_path):
@@ -128,7 +128,7 @@ class HashStorage:
                 raise Exception
             
         except Exception as e:
-            print(f"Error al almacenar el hash hfjdshj: {e}")
+            print(f"\n[-] Error al almacenar el hash: {e}\n")
             print()
             return False
         
@@ -171,6 +171,7 @@ class HashStorage:
                     raise Exception
         else:
             hash_array=self.calculate_directory_hashes(path)
+            results=[]
             if (hash_array):
                 inode=""
                 for hash_tuple in hash_array:
@@ -178,8 +179,14 @@ class HashStorage:
                     full_file_info=self.file_handler.extract_file_info(file_path)
                     inode=full_file_info[0]
                     if (self.db_manager.consult_file_existence(inode)):
+                        
                         print(f"\n[-] El archivo {inode} ya existe en la DB\n")
-                return True
+                        results.append(True)    
+                print(results)
+                return results
+            else:
+                print("\n[-] Surgió un error al calcular los hashes del directorio\n")
+                return False
         
         
     def change_hashing_algorithm(self, eleccion):

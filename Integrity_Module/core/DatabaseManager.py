@@ -17,7 +17,7 @@ class DatabaseManager:
         conn = sqlite3.connect('hashes.db')
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS file_hashes
-                    (inode INTEGER, hash TEXT, file_path TEXT, device TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(inode, device))''')
+                    (inode INTEGER, hash TEXT, file_path TEXT, device INTEGER, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(inode, device))''')
         conn.commit()
         conn.close()
 
@@ -26,7 +26,7 @@ class DatabaseManager:
         conn = sqlite3.connect('hashes.db')
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS integrity_events
-                    (event_id INTEGER, inode INTEGER, device TEXT, old_hash TEXT, new_hash TEXT, file_path TEXT, event_type TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(event_id))''')
+                    (event_id INTEGER, inode INTEGER, device INTEGER, old_hash TEXT, new_hash TEXT, file_path TEXT, event_type TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(event_id))''')
         #Event_type: CREATED, MODIFIED, VERIFIED, UPDATED
         conn.commit()
         conn.close()
@@ -34,7 +34,7 @@ class DatabaseManager:
     def consult_path_of_file(self, file_path):
         info_file = self.file_handler.extract_file_info(file_path)
         inode = info_file[0]
-        conn = sqlite3.connect(self.hash_storage.db_manager.db_name)
+        conn = sqlite3.connect('hashes.db')
         res = conn.cursor()
         consulta = "SELECT file_path from file_hashes WHERE inode = ?"
         res.execute(consulta, (inode,))
@@ -99,11 +99,10 @@ class DatabaseManager:
         c.execute("SELECT inode, file_path, device FROM file_hashes")
         rows=c.fetchall()
         for inode, file_path, device in rows:
-            
-            with open(file_path, "rb") as f:
-                if not os.path.exists(file_path):
+            if not os.path.exists(file_path):
                     print(f"\n[-] El archivo {file_path} no existe, no se puede actualizar el hash\n")
                     continue
+            with open(file_path, "rb") as f:
                 new_hash=self.file_handler.calculate_file_hash(file_path)
                 consulta=("UPDATE file_hashes SET hash= ? WHERE inode = ? AND device = ?")
                 c.execute(consulta, (new_hash, inode, device))

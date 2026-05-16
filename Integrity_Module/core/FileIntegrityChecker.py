@@ -1,11 +1,13 @@
 import sqlite3
 import hashlib  
 import os
-
+from core.HashStorage import HashStorage
+from utils.FileHandler import FileHandler
+from core.DatabaseManager import DatabaseManager
 
 class FileIntegrityChecker:
 
-    def __init__(self, hash_storage, file_handler, db_manager):
+    def __init__(self, hash_storage: HashStorage, file_handler: FileHandler, db_manager: DatabaseManager):
         self.hashing_algorithm = "sha256"
         self.hash_storage = hash_storage
         self.file_handler=file_handler
@@ -40,7 +42,7 @@ class FileIntegrityChecker:
             print("\n[+] Hashes son iguales.\n")
             return "VERIFIED"
         else:
-            print("\n[+] ATENCION!! CAMBIO EN HASHES DETECTADO!!\n")
+            print("\n[+] ⚠ Cambio en el hash del archivo detectado\n")
             return "MODIFIED"
     
     def detect_directory_hash_changes(self, path):
@@ -59,12 +61,12 @@ class FileIntegrityChecker:
             change["new_hash"] = hash_value
             change["file_path"] = file_path
             
-            if change["old_hash"] != "":
+            if change["old_hash"] not in ("", None):
                 if change["old_hash"] == change["new_hash"]:
                     print(f"\n[+] Hashes son iguales para el archivo {file_path}.\n")
                     change["event_type"] = "VERIFIED"
                 elif change["old_hash"] != change["new_hash"]:
-                    print(f"\n[+] ATENCION!! CAMBIO EN HASHES DETECTADO EN EL ARCHIVO {file_path}!!\n")
+                    print(f"\n[+] ⚠ Cambio en el hash del archivo {file_path} detectado\n")
                     change["event_type"] = "MODIFIED"
                 else:
                     change["event_type"] = "N/A"

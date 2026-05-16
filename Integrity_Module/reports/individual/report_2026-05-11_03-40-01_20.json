@@ -1,9 +1,0 @@
-{
-    "Event Type": "VERIFIED",
-    "Inode": 1313053,
-    "Device": "1796",
-    "old_hash": "427e170f76f81f7742e9da100d71346aa631acb3f9980a1a41680883c0654431",
-    "new_hash": "427e170f76f81f7742e9da100d71346aa631acb3f9980a1a41680883c0654431",
-    "file_path": "/workspaces/toolkitTCU/Integrity_Module/testing/prueba3.txt",
-    "timestamp": "2026-05-11 03:27:20"
-}
