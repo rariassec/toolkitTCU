@@ -1,9 +1,13 @@
 # toolkitTCU
 
-Suite de seguridad para el TCU. Integra tres módulos de análisis en una sola
-herramienta. La forma recomendada de uso es la interfaz web, que reúne los tres
-módulos, el historial de reportes y su descarga en un solo lugar. También se
-incluye una interfaz de consola como alternativa.
+Herramienta de código abierto desarrollada para la Fundación YOD como parte del
+proyecto de Trabajo Comunal Universitario (TCU). Es una suite de seguridad
+que integra tres módulos de análisis en una sola herramienta, pensada para
+evaluar y vigilar la seguridad de sitios web, redes y archivos en ONGs.
+
+La forma recomendada de uso es la interfaz web, que reúne los tres módulos, el
+historial de reportes y su descarga en un solo lugar. También se incluye una
+interfaz de consola como alternativa.
 
 Los módulos son:
 
