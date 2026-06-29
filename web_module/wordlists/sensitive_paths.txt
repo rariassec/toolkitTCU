@@ -1,0 +1,103 @@
+# Wordlist de rutas sensibles comunes en sitios web
+# Cubre los patrones identificados en la Actividad 1.1
+# Utilizado por el Detector de Archivos Expuestos (Actividades 2.8 a 2.10)
+
+# Archivos de configuracion
+.env
+.env.local
+.env.production
+.env.backup
+.env.old
+config.php.bak
+config.php~
+wp-config.php.bak
+wp-config.php.old
+wp-config.php~
+configuration.php.bak
+local.settings.json
+appsettings.json
+web.config.bak
+
+# Repositorios de control de versiones
+.git/config
+.git/HEAD
+.git/index
+.gitignore
+.svn/entries
+.hg/hgrc
+.bzr/branch/branch.conf
+
+# Backups de bases de datos
+backup.sql
+backup.sql.gz
+dump.sql
+dump.sql.gz
+database.sql
+database.sql.gz
+db_backup.sql
+mysql.sql
+backup.zip
+backup.tar.gz
+www.zip
+www.tar.gz
+site.zip
+site.tar.gz
+public_html.zip
+
+# Archivos de log
+error.log
+access.log
+debug.log
+laravel.log
+storage/logs/laravel.log
+
+# Directorios y archivos administrativos
+phpinfo.php
+info.php
+test.php
+adminer.php
+phpmyadmin/
+pma/
+admin/
+administrator/
+
+# Archivos de IDE y editores
+.vscode/settings.json
+.idea/workspace.xml
+.idea/.idea.iml
+.DS_Store
+Thumbs.db
+
+# Archivos de despliegue y CI/CD
+.dockerignore
+docker-compose.yml
+docker-compose.override.yml
+Dockerfile
+.travis.yml
+.gitlab-ci.yml
+.github/workflows/main.yml
+deploy.sh
+deploy.php
+
+# Archivos de documentacion sensible
+README.md.bak
+CHANGELOG.txt
+TODO.txt
+notes.txt
+credentials.txt
+passwords.txt
+
+# Archivos de instalacion expuestos
+install.php
+setup.php
+installer.php
+upgrade.php
+
+# Plantillas comunes
+robots.txt
+sitemap.xml
+crossdomain.xml
+clientaccesspolicy.xml
+humans.txt
+security.txt
+.well-known/security.txt

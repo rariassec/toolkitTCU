@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toolkit TCU · Fundación YOD</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/logo.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="Fundación YOD">
+      <div class="sub">Suite de Ciberseguridad</div>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="group-label">General</div>
+      <button data-page="dashboard" class="active"><span class="ic">▣</span> Panel principal</button>
+      <button data-page="unified"><span class="ic">▦</span> Reporte unificado</button>
+
+      <div class="group-label">Módulos</div>
+      <button data-page="web"><span class="ic">🌐</span> Análisis Web</button>
+      <button data-page="network"><span class="ic">📡</span> Análisis de Red</button>
+      <button data-page="integrity"><span class="ic">🛡</span> Integridad (FIM)</button>
+
+      <div class="group-label">Sistema</div>
+      <button data-page="keys"><span class="ic">🔑</span> API Keys</button>
+      <button data-page="reports"><span class="ic">📑</span> Reportes</button>
+    </nav>
+    <div class="foot">
+      Toolkit TCU · v1.0<br>Fundación YOD · Seguridad para ONGs
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Panel principal</h1>
+        <div class="crumb" id="pageCrumb">Resumen general de la sesión de seguridad</div>
+      </div>
+      <div class="actions">
+        <button class="btn ghost sm" id="refreshBtn">↻ Actualizar</button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <section class="page active" id="page-dashboard">
+        <div class="grid cols-4" id="dashStats">
+          <div class="stat"><div class="label">Hallazgos totales</div><div class="value" id="kpiFindings">—</div></div>
+          <div class="stat bad"><div class="label">Críticos / Altos</div><div class="value" id="kpiCrit">—</div></div>
+          <div class="stat good"><div class="label">Puntaje global</div><div class="value" id="kpiScore">—<small>/100</small></div></div>
+          <div class="stat accent"><div class="label">Módulos con datos</div><div class="value" id="kpiModules">—</div></div>
+        </div>
+
+        <div class="grid cols-3">
+          <div class="card" style="margin:0">
+            <h2>🌐 Análisis Web</h2>
+            <p class="desc">Headers, SSL/TLS, archivos expuestos, metadatos y más.</p>
+            <button class="btn" data-goto="web">Abrir módulo</button>
+          </div>
+          <div class="card" style="margin:0">
+            <h2>📡 Análisis de Red</h2>
+            <p class="desc">Puertos, servicios vulnerables, DNS, conexiones y riesgo.</p>
+            <button class="btn" data-goto="network">Abrir módulo</button>
+          </div>
+          <div class="card" style="margin:0">
+            <h2>🛡 Integridad (FIM)</h2>
+            <p class="desc">Vigilancia de cambios en archivos críticos.</p>
+            <button class="btn" data-goto="integrity">Abrir módulo</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Severidad consolidada de la sesión</h2>
+            <button class="btn ghost sm" data-goto="unified">Ver reporte completo →</button></div>
+          <div class="tag-row" id="dashSeverity"><span class="muted">Sin datos todavía. Ejecute algún análisis.</span></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-web">
+        <div class="card">
+          <h2>Análisis de seguridad web</h2>
+          <p class="desc">Evalúa la postura de seguridad de un sitio (cabeceras HTTP, SSL/TLS, archivos expuestos, metadatos de documentos y comprobaciones adicionales).</p>
+          <div class="row">
+            <label class="field" style="flex:2"><span>URL o dominio</span>
+              <input type="text" id="webUrl" placeholder="https://www.ejemplo.org"></label>
+            <label class="field"><span>Timeout (s)</span><input type="number" id="webTimeout" value="15" min="3"></label>
+            <label class="field"><span>Máx. documentos</span><input type="number" id="webMaxDocs" value="10" min="1"></label>
+          </div>
+          <h3>Scanners a ejecutar</h3>
+          <div class="checks" id="webScanners"></div>
+          <button class="btn" id="webRunBtn">▶ Iniciar análisis</button>
+        </div>
+        <div id="webResult"></div>
+      </section>
+
+      <section class="page" id="page-network">
+        <div class="card">
+          <div class="card-head"><h2>Objetivo de red</h2><div id="netState" class="tag-row"></div></div>
+          <p class="desc">Indique una IP, dominio o rango. Los dominios se resuelven a IP para los escaneos de puertos.</p>
+          <div class="row">
+            <label class="field" style="flex:2"><span>IP / dominio / rango</span>
+              <input type="text" id="netTarget" placeholder="scanme.nmap.org  ó  192.168.1.1-192.168.1.10"></label>
+            <div style="display:flex;align-items:flex-end;margin-bottom:14px"><button class="btn secondary" id="netResolveBtn">Validar objetivo</button></div>
+          </div>
+          <div id="netTargetInfo" class="hint" style="display:none"></div>
+        </div>
+
+        <div class="grid cols-2">
+          <div class="card" style="margin:0">
+            <h2>Escaneo de puertos</h2>
+            <p class="desc">TCP / UDP. Requiere nmap instalado; algunos modos requieren privilegios.</p>
+            <label class="field"><span>Profundidad</span>
+              <select id="netDepth"><option value="quick">Rápido</option><option value="deep">Profundo</option></select></label>
+            <div class="tag-row">
+              <button class="btn" id="netTcpBtn">▶ Escaneo TCP</button>
+              <button class="btn secondary" id="netUdpBtn">▶ Escaneo UDP</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin:0">
+            <h2>Servicios vulnerables (CVE)</h2>
+            <p class="desc">Busca CVEs para los servicios detectados. Requiere un escaneo de puertos previo.</p>
+            <label class="field"><span>Protocolo</span>
+              <select id="netVulnProto">
+                <option value="both">TCP y UDP</option><option value="tcp">Solo TCP</option><option value="udp">Solo UDP</option>
+              </select></label>
+            <button class="btn" id="netVulnBtn">▶ Detectar vulnerabilidades</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Escaneo personalizado</h2>
+          <p class="desc">Construye tu propia línea de nmap.</p>
+          <div class="row">
+            <label class="field"><span>Puertos</span><input type="text" id="cuPorts" placeholder="1-1024 ó 22,80,443"></label>
+            <label class="field"><span>Técnica</span>
+              <select id="cuTechnique">
+                <option value="none">Por defecto</option><option value="connect">TCP connect (sT)</option>
+                <option value="syn">TCP SYN (sS)</option><option value="udp">UDP (sU)</option>
+              </select></label>
+            <label class="field"><span>Timing (0-5)</span><input type="text" id="cuTiming" placeholder="4"></label>
+          </div>
+          <div class="checks">
+            <label class="check"><input type="checkbox" id="cuSv" checked> Detectar servicios/versiones</label>
+            <label class="check"><input type="checkbox" id="cuOs"> Detectar SO</label>
+            <label class="check"><input type="checkbox" id="cuPn" checked> Omitir ping (-Pn)</label>
+            <label class="check"><input type="checkbox" id="cuN" checked> Sin resolución DNS (-n)</label>
+          </div>
+          <div class="row">
+            <label class="field"><span>Scripts NSE</span><input type="text" id="cuScripts" placeholder="vuln,default"></label>
+            <label class="field"><span>Argumentos extra</span><input type="text" id="cuExtra" placeholder="--open"></label>
+          </div>
+          <button class="btn" id="netCustomBtn">▶ Ejecutar escaneo personalizado</button>
+        </div>
+
+        <div class="grid cols-2">
+          <div class="card" style="margin:0">
+            <h2>Análisis DNS</h2>
+            <p class="desc">Resolución directa/inversa y reputación de IP (VirusTotal).</p>
+            <div class="row">
+              <label class="field"><span>Dominio o IP</span><input type="text" id="dnsValue" placeholder="ejemplo.org"></label>
+              <label class="field"><span>Modo</span>
+                <select id="dnsMode"><option value="auto">Automático</option><option value="direct">Directa (dom→IP)</option><option value="reverse">Inversa (IP→dom)</option></select></label>
+            </div>
+            <button class="btn" id="dnsBtn">▶ Analizar DNS</button>
+          </div>
+
+          <div class="card" style="margin:0">
+            <h2>Conexiones sospechosas</h2>
+            <p class="desc">Captura tráfico saliente. Requiere privilegios de administrador (scapy).</p>
+            <div class="row">
+              <label class="field"><span>Duración (s)</span><input type="number" id="suspDur" value="60" min="5"></label>
+              <label class="field"><span>Tipo</span>
+                <select id="suspType"><option value="BASICO">Básico</option><option value="AVANZADO">Avanzado</option></select></label>
+            </div>
+            <button class="btn" id="suspBtn">▶ Iniciar monitoreo</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Cálculo de riesgo</h2>
+            <div class="tag-row">
+              <button class="btn" id="riskBtn">Calcular riesgo global</button>
+              <button class="btn secondary" id="netReportBtn">Generar reporte (JSON + PDF)</button>
+            </div></div>
+          <div id="riskResult"><p class="empty">Ejecute escaneos y luego calcule el riesgo consolidado.</p></div>
+        </div>
+
+        <div id="netResult"></div>
+      </section>
+
+      <section class="page" id="page-integrity">
+        <div class="grid cols-4" id="intStats">
+          <div class="stat"><div class="label">Archivos vigilados</div><div class="value" id="intMon">—</div></div>
+          <div class="stat accent"><div class="label">Cambios detectados</div><div class="value" id="intChg">—</div></div>
+          <div class="stat"><div class="label">Último escaneo</div><div class="value" id="intLast" style="font-size:16px">—</div></div>
+          <div class="stat" id="intStateTile"><div class="label">Estado</div><div class="value" id="intState" style="font-size:22px">—</div></div>
+        </div>
+
+        <div class="card" id="intMonitorCard">
+          <div class="card-head">
+            <h2>Monitoreo en tiempo real <span id="intMonBadge" class="pill amber">detenido</span></h2>
+            <div class="tag-row">
+              <button class="btn" id="intMonStartBtn">▶ Iniciar monitoreo</button>
+              <button class="btn danger" id="intMonStopBtn" style="display:none">■ Detener</button>
+            </div>
+          </div>
+          <p class="desc">Vigila las carpetas configuradas y detecta automáticamente cuando un archivo se crea, modifica o elimina. Si las alertas por correo están habilitadas, envía un email en cada cambio. Primero configura las carpetas a vigilar (abajo) y luego inicia el monitoreo.</p>
+          <div class="row" style="gap:24px">
+            <div>
+              <h3 style="margin-top:0">Carpetas vigiladas</h3>
+              <div id="intWatched" class="tag-row"><span class="muted">Sin carpetas configuradas.</span></div>
+            </div>
+            <div>
+              <h3 style="margin-top:0">Alertas por correo</h3>
+              <div id="intMailStatus"><span class="pill amber">no configuradas</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid cols-2">
+          <div class="card" style="margin:0">
+            <h2>Almacenar huella (hash)</h2>
+            <p class="desc">Registra la huella de un archivo o carpeta como referencia.</p>
+            <label class="field"><span>Ruta</span><input type="text" id="intPath" placeholder="/ruta/al/archivo-o-carpeta"></label>
+            <label class="field"><span>Algoritmo</span>
+              <select id="intAlgo"><option value="sha256">SHA-256</option><option value="sha512">SHA-512</option><option value="blake2b">BLAKE2b</option><option value="sha3_256">SHA3-256</option></select></label>
+            <button class="btn" id="intStoreBtn">▶ Proteger ruta</button>
+          </div>
+
+          <div class="card" style="margin:0">
+            <h2>Detección manual</h2>
+            <p class="desc">Compara el estado actual contra las huellas guardadas.</p>
+            <label class="field"><span>Ruta a verificar</span><input type="text" id="intDetPath" placeholder="/ruta/a/verificar"></label>
+            <div class="checks">
+              <label class="check"><input type="checkbox" id="intSub" checked> Incluir subcarpetas</label>
+              <label class="check"><input type="checkbox" id="intHidden"> Archivos ocultos</label>
+              <label class="check"><input type="checkbox" id="intDeleted" checked> Incluir eliminados</label>
+              <label class="check"><input type="checkbox" id="intAutoRep"> Reporte automático</label>
+            </div>
+            <div class="row">
+              <label class="field"><span>Extensiones (coma)</span><input type="text" id="intExt" placeholder=".txt,.conf"></label>
+              <label class="field"><span>Tamaño máx (bytes)</span><input type="number" id="intSize" placeholder="opcional"></label>
+            </div>
+            <button class="btn" id="intDetectBtn">▶ Ejecutar detección</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Eventos de integridad</h2>
+            <button class="btn ghost sm" id="intEventsBtn">Cargar eventos</button></div>
+          <div id="intEvents"><p class="empty">Cargue los eventos registrados.</p></div>
+        </div>
+
+        <div class="card">
+          <h2>Estadísticas</h2>
+          <p class="desc">Gráficos del monitoreo (últimos 7 y 30 días, extensiones afectadas).</p>
+          <button class="btn" id="intGraphBtn">Generar gráficos</button>
+          <div class="grid cols-3 graph-grid" id="intGraphs" style="margin-top:16px"></div>
+        </div>
+
+        <div class="grid cols-2">
+          <div class="card" style="margin:0">
+            <h2>Generar reporte</h2>
+            <p class="desc">Genera el reporte de integridad en JSON y PDF (con los eventos detectados) en la carpeta de reportes.</p>
+            <button class="btn" id="intRepBtn">Generar reporte (JSON + PDF)</button>
+          </div>
+
+          <div class="card" style="margin:0">
+            <h2>Configuración de monitoreo</h2>
+            <p class="desc">Carpetas vigiladas (una por línea) y algoritmo por defecto.</p>
+            <label class="field"><span>Carpetas vigiladas</span><textarea id="intCfgPaths" rows="3" placeholder="/ruta/uno&#10;/ruta/dos"></textarea></label>
+            <div class="row">
+              <label class="field"><span>Algoritmo</span>
+                <select id="intCfgAlgo"><option value="sha256">SHA-256</option><option value="sha512">SHA-512</option><option value="blake2b">BLAKE2b</option><option value="sha3_256">SHA3-256</option></select></label>
+              <label class="field"><span>Intervalo (s)</span><input type="number" id="intCfgInt" value="10" min="1"></label>
+              <label class="check" style="align-self:flex-end;margin-bottom:18px"><input type="checkbox" id="intCfgRec" checked> Recursivo</label>
+            </div>
+            <button class="btn secondary" id="intCfgBtn">Guardar configuración</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Alertas por correo</h2>
+          <p class="desc">Envío de alertas vía Gmail (requiere contraseña de aplicación).</p>
+          <div class="row">
+            <label class="field"><span>Correo emisor</span><input type="text" id="mailFrom" placeholder="alertas@gmail.com"></label>
+            <label class="field"><span>Contraseña de app</span><input type="password" id="mailPass"></label>
+            <label class="field"><span>Correo destinatario</span><input type="text" id="mailTo" placeholder="seguridad@ong.org"></label>
+          </div>
+          <button class="btn secondary" id="mailBtn">Guardar alertas</button>
+        </div>
+      </section>
+
+      <section class="page" id="page-unified">
+        <div class="card">
+          <div class="card-head"><h2>Reporte unificado del toolkit</h2>
+            <div class="tag-row">
+              <button class="btn ghost sm" id="uniRefreshBtn">↻ Consolidar</button>
+              <button class="btn sm" id="uniSaveBtn">💾 Guardar JSON + PDF</button>
+            </div></div>
+          <p class="desc">Consolida los hallazgos de los tres módulos a partir de lo analizado en esta sesión.</p>
+          <div class="grid cols-4" style="margin-bottom:8px">
+            <div class="stat"><div class="label">Hallazgos</div><div class="value" id="uTotal">—</div></div>
+            <div class="stat bad"><div class="label">Críticos/Altos</div><div class="value" id="uCrit">—</div></div>
+            <div class="stat good"><div class="label">Puntaje</div><div class="value" id="uScore">—<small>/100</small></div></div>
+            <div class="stat accent"><div class="label">Módulos</div><div class="value" id="uMods" style="font-size:15px">—</div></div>
+          </div>
+          <div class="tag-row" id="uSeverity"></div>
+        </div>
+        <div class="card">
+          <h2>Detalle de hallazgos</h2>
+          <div id="uFindings"><p class="empty">Pulse «Consolidar» para generar el reporte.</p></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-keys">
+        <div class="card">
+          <h2>API Keys</h2>
+          <p class="desc">Claves opcionales que enriquecen los análisis de red.</p>
+          <div id="keysBox" class="grid cols-2"></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-reports">
+        <div class="card">
+          <div class="card-head"><h2>Reportes generados</h2>
+            <button class="btn ghost sm" id="repRefreshBtn">↻ Actualizar</button></div>
+          <p class="desc">Archivos JSON y PDF guardados por el toolkit.</p>
+          <div id="repList"><p class="empty">Cargando…</p></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

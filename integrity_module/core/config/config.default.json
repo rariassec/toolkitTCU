@@ -1,0 +1,102 @@
+{
+    "watch": [
+        {
+            "paths": [],
+            "recursive": true
+        }
+    ],
+    "include_patterns": [
+        ".*"
+    ],
+    "exclude_patterns": [],
+    "default_hashing_algorithm": "sha256",
+    "backup": {
+        "directory": "${MODULE_DIR}/snapshots",
+        "interval_seconds": 10
+    },
+    "scan": {
+        "interval_seconds": 10
+    },
+    "alerts": {
+        "email_enabled": false,
+        "desktop_notifications": false
+    },
+    "logging": {
+        "directory": "${MODULE_DIR}/utils/logs"
+    },
+    "reports": {
+        "individual": "${MODULE_DIR}/reports/general",
+        "general": "${MODULE_DIR}/reports/general"
+    },
+    "default_baseline": {
+        "paths": []
+    },
+    "severity_levels": {
+        "MODIFIED": {
+            "CRITICAL": [
+                "/etc",
+                "/boot",
+                "/root",
+                "/usr/bin",
+                "/usr/sbin",
+                "/lib",
+                "/lib64",
+                "/usr/lib",
+                "/usr/lib64"
+            ],
+            "HIGH": [
+                "/var/www",
+                "/var/log",
+                "/var/spool/cron",
+                "/home/*/.ssh",
+                "/home/*/.gnupg"
+            ],
+            "MEDIUM": [
+                "/home",
+                "/usr/local",
+                "/opt"
+            ],
+            "LOW": [
+                "/tmp",
+                "/var/tmp",
+                "/var/cache"
+            ]
+        },
+        "DELETED": {
+            "CRITICAL": [
+                "/etc",
+                "/boot",
+                "/root",
+                "/usr/bin",
+                "/usr/sbin",
+                "/var/www",
+                "/var/log"
+            ],
+            "HIGH": [
+                "/home",
+                "/usr/local",
+                "/opt"
+            ],
+            "MEDIUM": [
+                "*"
+            ]
+        },
+        "CREATED": {
+            "HIGH": [
+                "/etc",
+                "/boot",
+                "/usr/bin",
+                "/usr/sbin"
+            ],
+            "MEDIUM": [
+                "/home",
+                "/tmp",
+                "/var/tmp"
+            ],
+            "LOW": [
+                "*"
+            ]
+        }
+    },
+    "default_severity": "MEDIUM"
+}
