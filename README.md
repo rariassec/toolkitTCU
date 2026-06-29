@@ -75,6 +75,12 @@ capacidades de análisis que la web.
 python run.py
 ```
 
+Para escaneos de red que requieren privilegios, ejecútelo con sudo:
+
+```
+sudo $(which python) run.py
+```
+
 Presenta un menú con las opciones:
 
 1. Análisis Web
