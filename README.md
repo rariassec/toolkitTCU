@@ -1,7 +1,11 @@
 # toolkitTCU
 
 Suite de seguridad para el TCU. Integra tres módulos de análisis en una sola
-herramienta, con interfaz web y consola:
+herramienta. La forma recomendada de uso es la interfaz web, que reúne los tres
+módulos, el historial de reportes y su descarga en un solo lugar. También se
+incluye una interfaz de consola como alternativa.
+
+Los módulos son:
 
 - Análisis Web: revisa la seguridad de un sitio (headers HTTP, SSL/TLS,
   archivos expuestos, metadatos de documentos y más).
@@ -40,14 +44,17 @@ el comando de instalación correspondiente al sistema operativo.
 
 ### Interfaz web (recomendada)
 
+Es la forma principal de ejecutar el toolkit. Desde la carpeta del proyecto:
+
 ```
 python run_web.py
 ```
 
-Abre la aplicación en `http://127.0.0.1:5000`. Desde el navegador se accede a
-los tres módulos, al historial de reportes y a su descarga.
+Abre la aplicación en `http://127.0.0.1:5000`. En el navegador se accede a los
+tres módulos, al historial de reportes y a su descarga, sin necesidad de usar
+la consola.
 
-Para escaneos de red que requieren privilegios:
+Para escaneos de red que requieren privilegios, inicie la interfaz con sudo:
 
 ```
 sudo $(which python) run_web.py
@@ -59,7 +66,10 @@ Variables de entorno opcionales:
 - `TCU_WEB_PORT`: puerto (por defecto `5000`).
 - `TCU_WEB_DEBUG`: `1` para activar el modo depuración.
 
-### Interfaz de consola
+### Interfaz de consola (alternativa)
+
+Disponible para entornos sin navegador o uso por terminal. Ofrece las mismas
+capacidades de análisis que la web.
 
 ```
 python run.py
