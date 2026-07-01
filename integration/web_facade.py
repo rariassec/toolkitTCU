@@ -14,7 +14,7 @@ def save_reports(report):
     _LAST_RESULT = module_result
     try:
         json_path, pdf_path = save_module_report(
-            module_result, "reporte_web", "Reporte de Analisis Web"
+            module_result, "reporte_web", "Reporte de Análisis Web"
         )
         print(f"\n[+] Reporte web guardado:")
         print(f"    JSON: {json_path}")

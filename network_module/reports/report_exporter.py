@@ -63,7 +63,7 @@ def export_report(
         "Protocolo",
         "Estado",
         "Servicio",
-        "Version"
+        "Versión"
     ]]
     for result in results:
         table_data.append([
@@ -176,7 +176,7 @@ def export_vulnerabilities_report_pdf(results):
     <b>Hora:</b> {current_time}<br/>
     <b>Total servicios analizados:</b> {total_services}<br/>
     <b>Total vulnerabilidades encontradas:</b> {total_vulnerabilities}<br/>
-    <b>Vulnerabilidades criticas:</b> {critical_count}<br/>
+    <b>Vulnerabilidades críticas:</b> {critical_count}<br/>
     <b>Vulnerabilidades altas:</b> {high_count}<br/>
     <b>Vulnerabilidades medias:</b> {medium_count}<br/>
     <b>Vulnerabilidades bajas:</b> {low_count}<br/>
@@ -193,7 +193,7 @@ def export_vulnerabilities_report_pdf(results):
         "Puerto",
         "Protocolo",
         "Servicio",
-        "Version detectada",
+        "Versión detectada",
         "CVE",
         "Severidad",
         "CVSS"
@@ -266,8 +266,8 @@ def export_suspicious_report_pdf(
     info = f"""
     <b>Fecha:</b> {datetime.now().strftime("%Y-%m-%d")}<br/>
     <b>Hora:</b> {datetime.now().strftime("%H:%M:%S")}<br/>
-    <b>Duracion monitoreo:</b> {monitoring_time}<br/>
-    <b>Tipo analisis:</b> {analysis_type}<br/>
+    <b>Duración monitoreo:</b> {monitoring_time}<br/>
+    <b>Tipo análisis:</b> {analysis_type}<br/>
     <b>Total conexiones:</b> {len(results)}<br/>
     """
     elements.append(
@@ -305,9 +305,9 @@ def export_suspicious_report_pdf(
             "IP Destino",
             "Puerto",
             "Protocolo",
-            "Pais",
+            "País",
             "Maliciosa",
-            "Trafico anomalo",
+            "Tráfico anómalo",
             "Conexiones",
             "Destinos",
             "Riesgo",
@@ -365,7 +365,7 @@ def export_dns_report_pdf(results):
     elements = []
 
     title = Paragraph(
-        "Reporte analisis DNS",
+        "Reporte análisis DNS",
         styles["Title"])
     elements.append(title)
     elements.append(Spacer(1, 20))
@@ -476,7 +476,7 @@ def export_risk_report_pdf(
     {risk_level}<br/>
     <b>Total Vulnerabilidades:</b>
     {len(vulnerabilities)}<br/>
-    <b>Criticas:</b>
+    <b>Críticas:</b>
     {critical_count}<br/>
     <b>Altas:</b>
     {high_count}<br/>

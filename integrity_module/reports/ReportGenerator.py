@@ -230,11 +230,11 @@ class ReportGenerator:
 
             story = []
 
-            story.append(Paragraph("MODULO DE INTEGRIDAD - TOOLKIT TCU", subtitle_style))
+            story.append(Paragraph("MÓDULO DE INTEGRIDAD - TOOLKIT TCU", subtitle_style))
             story.append(Paragraph("RESUMEN EJECUTIVO DE SEGURIDAD", title_style))
 
             now_str = datetime.now().strftime('%d/%m/%Y a las %H:%M:%S')
-            meta_text = f"<b>Fecha de Reporte:</b> {now_str} &nbsp;|&nbsp; <b>Ultimo Escaneo:</b> {last_scan_date} a las {last_scan_time}"
+            meta_text = f"<b>Fecha de Reporte:</b> {now_str} &nbsp;|&nbsp; <b>Último Escaneo:</b> {last_scan_date} a las {last_scan_time}"
             story.append(Paragraph(meta_text, subtitle_style))
             story.append(Spacer(1, 10))
 
@@ -259,7 +259,7 @@ class ReportGenerator:
             story.append(t1)
             story.append(Spacer(1, 15))
 
-            story.append(Paragraph("2. Metricas Historicas de Eventos", section_heading))
+            story.append(Paragraph("2. Métricas Históricas de Eventos", section_heading))
             metrics_data = [
                 [Paragraph("<b>Evento</b>", bold_label), Paragraph("<b>Cantidad</b>", bold_label)],
                 [Paragraph("Creaciones (CREATED)", body_style), Paragraph(str(creados), body_style)],
@@ -268,7 +268,7 @@ class ReportGenerator:
                 [Paragraph("Actualizaciones (UPDATED)", body_style), Paragraph(str(actualizados), body_style)],
                 [Paragraph("Respaldos de Seguridad (BACKUP)", body_style), Paragraph(str(respaldos), body_style)],
                 [Paragraph("Verificaciones de Baseline (VERIFIED)", body_style), Paragraph(str(verificados), body_style)],
-                [Paragraph("<b>Total Historico de Eventos</b>", bold_label), Paragraph(f"<b>{total_eventos}</b>", bold_label)]
+                [Paragraph("<b>Total Histórico de Eventos</b>", bold_label), Paragraph(f"<b>{total_eventos}</b>", bold_label)]
             ]
             t2 = Table(metrics_data, colWidths=[240, 280])
             t2.setStyle(TableStyle([
@@ -284,7 +284,7 @@ class ReportGenerator:
             story.append(t2)
             story.append(Spacer(1, 15))
 
-            story.append(Paragraph("3. Analisis de Integridad y Alerta", section_heading))
+            story.append(Paragraph("3. Análisis de Integridad y Alerta", section_heading))
             tasa_cambio = (changes_detected / total_monitored * 100) if total_monitored else 0.0
 
             estado_salud = "SEGURO"
@@ -293,11 +293,11 @@ class ReportGenerator:
                 estado_salud = "ADVERTENCIA (Cambios sin validar)"
                 status_color_hex = '#ECC94B'
             if any(r['severity'] in ['CRITICAL', 'HIGH'] for r in alert_rows):
-                estado_salud = "CRITICO (Amenaza de seguridad detectada)"
+                estado_salud = "CRÍTICO (Amenaza de seguridad detectada)"
                 status_color_hex = '#F56565'
 
             risk_data = [
-                [Paragraph("Tasa actual de alteracion", bold_label), Paragraph(f"{tasa_cambio:.2f}% de la base de datos", body_style)],
+                [Paragraph("Tasa actual de alteración", bold_label), Paragraph(f"{tasa_cambio:.2f}% de la base de datos", body_style)],
                 [Paragraph("Nivel de alerta global", bold_label), Paragraph(f"<font color='{status_color_hex}'><b>{estado_salud}</b></font>", body_style)]
             ]
             t3 = Table(risk_data, colWidths=[240, 280])
@@ -350,7 +350,7 @@ class ReportGenerator:
                 ]))
                 story.append(t4)
             else:
-                story.append(Paragraph("No se registran incidentes de severidad Media, Alta o Critica en el historial.", body_style))
+                story.append(Paragraph("No se registran incidentes de severidad Media, Alta o Crítica en el historial.", body_style))
 
             story.append(Spacer(1, 15))
 
@@ -358,23 +358,23 @@ class ReportGenerator:
             recs = []
 
             if changes_detected > 0:
-                recs.append(f"<b>Inspeccion de Alteraciones:</b> Se identificaron {changes_detected} archivos modificados sin conciliar. Se sugiere inspeccionar las rutas afectadas para descartar accesos no autorizados.")
+                recs.append(f"<b>Inspección de Alteraciones:</b> Se identificaron {changes_detected} archivos modificados sin conciliar. Se sugiere inspeccionar las rutas afectadas para descartar accesos no autorizados.")
             else:
-                recs.append("<b>Mantenimiento de Baseline:</b> No se registran alteraciones sin validar en el ultimo escaneo. Mantenga el baseline actual para asegurar la consistencia del monitoreo.")
+                recs.append("<b>Mantenimiento de Baseline:</b> No se registran alteraciones sin validar en el último escaneo. Mantenga el baseline actual para asegurar la consistencia del monitoreo.")
 
             if total_eventos > 50:
-                recs.append(f"<b>Optimizacion de Registros:</b> Se detecta un volumen alto de eventos historicos ({total_eventos}). Se recomienda realizar depuraciones periodicas de registros antiguos para optimizar el rendimiento.")
+                recs.append(f"<b>Optimización de Registros:</b> Se detecta un volumen alto de eventos históricos ({total_eventos}). Se recomienda realizar depuraciones periódicas de registros antiguos para optimizar el rendimiento.")
             else:
-                recs.append(f"<b>Monitoreo de Eventos:</b> El historial registra {total_eventos} eventos acumulados. Continue con el registro ordinario para facilitar auditorias futuras.")
+                recs.append(f"<b>Monitoreo de Eventos:</b> El historial registra {total_eventos} eventos acumulados. Continúe con el registro ordinario para facilitar auditorías futuras.")
 
             if tasa_cambio > 10:
-                recs.append(f"<b>Auditoria de Directorios:</b> Con una tasa de cambio de integridad del {tasa_cambio:.2f}% en el baseline, se sugiere revisar las politicas de permisos de escritura de los directorios monitoreados.")
+                recs.append(f"<b>Auditoría de Directorios:</b> Con una tasa de cambio de integridad del {tasa_cambio:.2f}% en el baseline, se sugiere revisar las políticas de permisos de escritura de los directorios monitoreados.")
             else:
-                recs.append("<b>Estabilidad del Sistema:</b> La tasa de variacion es baja, lo que indica un entorno de archivos monitoreados estable.")
+                recs.append("<b>Estabilidad del Sistema:</b> La tasa de variación es baja, lo que indica un entorno de archivos monitoreados estable.")
 
-            recs.append(f"<b>Seguridad Criptografica:</b> Las firmas de baseline utilizan el algoritmo {algo}. Se aconseja mantener este estandar robusto para garantizar la invulnerabilidad ante colisiones.")
+            recs.append(f"<b>Seguridad Criptográfica:</b> Las firmas de baseline utilizan el algoritmo {algo}. Se aconseja mantener este estándar robusto para garantizar la invulnerabilidad ante colisiones.")
 
-            recs.append("<b>Monitoreo Preventivo:</b> Se sugiere complementar el monitoreo en tiempo real con escaneos completos programados periodicamente para auditar la integridad global.")
+            recs.append("<b>Monitoreo Preventivo:</b> Se sugiere complementar el monitoreo en tiempo real con escaneos completos programados periódicamente para auditar la integridad global.")
 
             for rec in recs:
                 story.append(Paragraph(f"• {rec}", body_style))
@@ -382,24 +382,24 @@ class ReportGenerator:
 
             story.append(PageBreak())
 
-            story.append(Paragraph("6. Graficos y Tendencias", section_heading))
+            story.append(Paragraph("6. Gráficos y Tendencias", section_heading))
             story.append(Spacer(1, 10))
 
             if os.path.exists(plot_7d):
-                story.append(Paragraph("<b>Tendencia de Cambios en los Ultimos 7 Dias</b>", bold_label))
+                story.append(Paragraph("<b>Tendencia de Cambios en los Últimos 7 Días</b>", bold_label))
                 story.append(Spacer(1, 5))
                 story.append(Image(plot_7d, width=420, height=210))
                 story.append(Spacer(1, 20))
 
             if os.path.exists(plot_ext):
-                story.append(Paragraph("<b>Distribucion de Extensiones Afectadas</b>", bold_label))
+                story.append(Paragraph("<b>Distribución de Extensiones Afectadas</b>", bold_label))
                 story.append(Spacer(1, 5))
                 story.append(Image(plot_ext, width=420, height=210))
                 story.append(Spacer(1, 20))
 
             if os.path.exists(plot_30d):
                 story.append(PageBreak())
-                story.append(Paragraph("<b>Historial de Tendencia de Cambios (30 Dias)</b>", bold_label))
+                story.append(Paragraph("<b>Historial de Tendencia de Cambios (30 Días)</b>", bold_label))
                 story.append(Spacer(1, 5))
                 story.append(Image(plot_30d, width=500, height=180))
 

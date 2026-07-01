@@ -67,21 +67,21 @@ def evaluate_certificate(cert, tls_version):
     if cert is None:
         findings.append(create_finding(
             finding_id="WEB-SSL-001",
-            title="No fue posible establecer conexion SSL/TLS",
+            title="No fue posible establecer conexión SSL/TLS",
             severity=SEVERITY_CRITICAL,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no respondio a una conexion segura. Esto puede indicar que el sitio "
+                "Su sitio no respondió a una conexión segura. Esto puede indicar que el sitio "
                 "no soporta HTTPS o que su certificado tiene un problema grave que impide "
-                "establecer la conexion."
+                "establecer la conexión."
             ),
             technical_description=(
                 "Fallo el handshake SSL/TLS contra el host objetivo. No fue posible obtener "
-                "informacion del certificado."
+                "información del certificado."
             ),
             recommendation=(
-                "Verificar que el servidor tenga un certificado SSL valido instalado y que "
-                "el puerto 443 este accesible."
+                "Verificar que el servidor tenga un certificado SSL válido instalado y que "
+                "el puerto 443 esté accesible."
             ),
         ))
         return findings
@@ -89,15 +89,15 @@ def evaluate_certificate(cert, tls_version):
     if cert.get("_invalid"):
         findings.append(create_finding(
             finding_id="WEB-SSL-002",
-            title="Certificado SSL invalido o no confiable",
+            title="Certificado SSL inválido o no confiable",
             severity=SEVERITY_CRITICAL,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "El certificado del sitio no es valido. Los visitantes veran advertencias en "
-                "su navegador y no podran confiar en que se estan conectando al sitio "
-                "correcto, lo que daria oportunidad a ataques de suplantacion."
+                "El certificado del sitio no es válido. Los visitantes verán advertencias en "
+                "su navegador y no podrán confiar en que se están conectando al sitio "
+                "correcto, lo que daría oportunidad a ataques de suplantación."
             ),
-            technical_description=f"Fallo de verificacion: {cert.get('_error', 'desconocido')}",
+            technical_description=f"Fallo de verificación: {cert.get('_error', 'desconocido')}",
             recommendation=(
                 "Renovar el certificado mediante una autoridad certificadora confiable. "
                 "Para ONGs, Let's Encrypt ofrece certificados gratuitos."
@@ -121,10 +121,10 @@ def evaluate_certificate(cert, tls_version):
                     severity=SEVERITY_CRITICAL,
                     owasp_category=OWASP_CATEGORY,
                     accessible_description=(
-                        "El certificado de seguridad de su sitio ya esta vencido."
+                        "El certificado de seguridad de su sitio ya está vencido."
                     ),
                     technical_description=(
-                        f"El certificado expiro hace {abs(days_remaining)} dias "
+                        f"El certificado expiró hace {abs(days_remaining)} días "
                         f"(notAfter: {cert['notAfter']})."
                     ),
                     recommendation="Renovar el certificado de inmediato.",
@@ -133,35 +133,35 @@ def evaluate_certificate(cert, tls_version):
             elif days_remaining < 15:
                 findings.append(create_finding(
                     finding_id="WEB-SSL-004",
-                    title="Certificado SSL proximo a expirar",
+                    title="Certificado SSL próximo a expirar",
                     severity=SEVERITY_HIGH,
                     owasp_category=OWASP_CATEGORY,
                     accessible_description=(
-                        f"El certificado de su sitio expira en {days_remaining} dias. Si no "
-                        f"se renueva a tiempo los visitantes veran advertencias graves."
+                        f"El certificado de su sitio expira en {days_remaining} días. Si no "
+                        f"se renueva a tiempo los visitantes verán advertencias graves."
                     ),
                     technical_description=(
-                        f"El certificado expira el {cert['notAfter']} ({days_remaining} dias)."
+                        f"El certificado expira el {cert['notAfter']} ({days_remaining} días)."
                     ),
                     recommendation=(
-                        "Renovar el certificado pronto. Considere automatizar la renovacion "
+                        "Renovar el certificado pronto. Considere automatizar la renovación "
                     ),
                     evidence={"expiry_date": cert["notAfter"], "days_remaining": days_remaining},
                 ))
             elif days_remaining < 30:
                 findings.append(create_finding(
                     finding_id="WEB-SSL-005",
-                    title="Certificado SSL expira en menos de 30 dias",
+                    title="Certificado SSL expira en menos de 30 días",
                     severity=SEVERITY_MEDIUM,
                     owasp_category=OWASP_CATEGORY,
                     accessible_description=(
-                        f"Quedan {days_remaining} dias para que el certificado expire. "
-                        f"Es momento de planificar la renovacion."
+                        f"Quedan {days_remaining} días para que el certificado expire. "
+                        f"Es momento de planificar la renovación."
                     ),
                     technical_description=(
-                        f"El certificado expira el {cert['notAfter']} ({days_remaining} dias)."
+                        f"El certificado expira el {cert['notAfter']} ({days_remaining} días)."
                     ),
-                    recommendation="Programar la renovacion del certificado en las proximas semanas.",
+                    recommendation="Programar la renovación del certificado en las próximas semanas.",
                     evidence={"expiry_date": cert["notAfter"], "days_remaining": days_remaining},
                 ))
         except (ValueError, KeyError):
@@ -194,7 +194,7 @@ def evaluate_protocols(host, port, timeout=10):
     findings = []
     supported = {}
 
-    for name, version in PROTOCOLS_TO_TEST.items():
+    for name, versión in PROTOCOLS_TO_TEST.items():
         supported[name] = test_protocol(host, port, version, timeout)
 
     if supported.get("SSLv3"):
@@ -205,15 +205,15 @@ def evaluate_protocols(host, port, timeout=10):
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
                 "Su servidor permite conexiones usando un protocolo de seguridad muy antiguo "
-                "(SSLv3) que tiene fallos conocidos. Un atacante podria descifrar partes del "
-                "trafico cifrado entre los visitantes y el sitio."
+                "(SSLv3) que tiene fallos conocidos. Un atacante podría descifrar partes del "
+                "tráfico cifrado entre los visitantes y el sitio."
             ),
             technical_description=(
                 "El servidor acepta handshakes SSLv3, vulnerable al ataque POODLE "
                 "(CVE-2014-3566). El padding de cifradores en modo CBC permite a un atacante "
-                "descifrar bytes del trafico cifrado."
+                "descifrar bytes del tráfico cifrado."
             ),
-            recommendation="Deshabilitar SSLv3 en la configuracion del servidor web inmediatamente.",
+            recommendation="Deshabilitar SSLv3 en la configuración del servidor web inmediatamente.",
             evidence={"protocol": "SSLv3", "supported": True},
             resources=["https://www.openssl.org/~bodo/ssl-poodle.pdf"],
         ))
@@ -225,14 +225,14 @@ def evaluate_protocols(host, port, timeout=10):
             severity=SEVERITY_HIGH,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su servidor permite conexiones usando una version antigua del protocolo de "
-                "seguridad que ya esta declarada obsoleta y no debe usarse en sitios actuales."
+                "Su servidor permite conexiones usando una versión antigua del protocolo de "
+                "seguridad que ya está declarada obsoleta y no debe usarse en sitios actuales."
             ),
             technical_description=(
-                "TLS 1.0 esta deprecado por la IETF (RFC 8996) y por NIST SP 800-52. "
+                "TLS 1.0 está deprecado por la IETF (RFC 8996) y por NIST SP 800-52. "
                 "Presenta debilidades estructurales y no debe usarse."
             ),
-            recommendation="Configurar el servidor para aceptar unicamente TLS 1.2 y TLS 1.3.",
+            recommendation="Configurar el servidor para aceptar únicamente TLS 1.2 y TLS 1.3.",
             evidence={"protocol": "TLSv1.0", "supported": True},
         ))
 
@@ -243,10 +243,10 @@ def evaluate_protocols(host, port, timeout=10):
             severity=SEVERITY_HIGH,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su servidor permite conexiones usando TLS 1.1, una version del protocolo "
+                "Su servidor permite conexiones usando TLS 1.1, una versión del protocolo "
                 "que ya no se considera segura y fue formalmente deprecada."
             ),
-            technical_description="TLS 1.1 esta deprecado por la IETF (RFC 8996) desde 2021.",
+            technical_description="TLS 1.1 está deprecado por la IETF (RFC 8996) desde 2021.",
             recommendation="Deshabilitar TLS 1.1 y aceptar solo TLS 1.2 y TLS 1.3.",
             evidence={"protocol": "TLSv1.1", "supported": True},
         ))
@@ -258,12 +258,12 @@ def evaluate_protocols(host, port, timeout=10):
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su servidor no soporta la version mas moderna del protocolo de seguridad "
+                "Su servidor no soporta la versión más moderna del protocolo de seguridad "
                 "(TLS 1.3), que ofrece mejor rendimiento y mayor seguridad."
             ),
-            technical_description="No se logro establecer conexion con TLS 1.3.",
+            technical_description="No se logró establecer conexión con TLS 1.3.",
             recommendation=(
-                "Si la version del servidor web lo permite, habilitar TLS 1.3 para mejorar "
+                "Si la versión del servidor web lo permite, habilitar TLS 1.3 para mejorar "
                 "rendimiento y seguridad."
             ),
             evidence={"protocol": "TLSv1.3", "supported": False},
@@ -276,11 +276,11 @@ def evaluate_protocols(host, port, timeout=10):
             severity=SEVERITY_CRITICAL,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su servidor no soporta ninguna version moderna del protocolo de seguridad. "
-                "Esto significa que las conexiones podrian estar usando protocolos antiguos "
+                "Su servidor no soporta ninguna versión moderna del protocolo de seguridad. "
+                "Esto significa que las conexiones podrían estar usando protocolos antiguos "
                 "y vulnerables."
             ),
-            technical_description="No se establecio conexion ni con TLS 1.2 ni con TLS 1.3.",
+            technical_description="No se estableció conexión ni con TLS 1.2 ni con TLS 1.3.",
             recommendation="Habilitar TLS 1.2 y TLS 1.3 en el servidor web inmediatamente.",
         ))
 
@@ -304,20 +304,20 @@ def evaluate_ciphers(host, port, timeout=10):
                         if kw in cipher_name.upper():
                             findings.append(create_finding(
                                 finding_id="WEB-SSL-020",
-                                title=f"Servidor negocia cifrado debil ({cipher_name})",
+                                title=f"Servidor negocia cifrado débil ({cipher_name})",
                                 severity=SEVERITY_HIGH,
                                 owasp_category=OWASP_CATEGORY,
                                 accessible_description=(
-                                    "Su servidor utiliza un metodo de cifrado considerado "
-                                    "debil. Esto reduce la efectividad real de la proteccion "
+                                    "Su servidor utiliza un método de cifrado considerado "
+                                    "débil. Esto reduce la efectividad real de la protección "
                                     "que ofrece HTTPS."
                                 ),
                                 technical_description=(
                                     f"Cifrado negociado: {cipher_name} ({bits} bits). "
-                                    f"Contiene el patron '{kw}' considerado debil por NIST."
+                                    f"Contiene el patrón '{kw}' considerado débil por NIST."
                                 ),
                                 recommendation=(
-                                    "Eliminar cifrados debiles (RC4, DES, 3DES, EXPORT, NULL) "
+                                    "Eliminar cifrados débiles (RC4, DES, 3DES, EXPORT, NULL) "
                                     "y priorizar suites con Perfect Forward Secrecy (ECDHE)."
                                 ),
                                 evidence={"cipher": cipher_name, "bits": bits},
@@ -331,7 +331,7 @@ def evaluate_ciphers(host, port, timeout=10):
                             severity=SEVERITY_HIGH,
                             owasp_category=OWASP_CATEGORY,
                             accessible_description=(
-                                "El metodo de cifrado utilizado tiene una longitud de clave "
+                                "El método de cifrado utilizado tiene una longitud de clave "
                                 "menor a la recomendada actualmente."
                             ),
                             technical_description=(
@@ -349,22 +349,22 @@ def evaluate_robot(supported):
     if supported.get("TLSv1.0") or supported.get("TLSv1.1"):
         return create_finding(
             finding_id="WEB-SSL-030",
-            title="Posible exposicion a vulnerabilidades en cifrados RSA antiguos",
+            title="Posible exposición a vulnerabilidades en cifrados RSA antiguos",
             severity=SEVERITY_INFO,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "El soporte de versiones antiguas del protocolo TLS junto al uso historico "
+                "El soporte de versiones antiguas del protocolo TLS junto al uso histórico "
                 "de cifrados RSA puede exponer al sitio a vulnerabilidades como ROBOT. Se "
-                "recomienda una verificacion especializada."
+                "recomienda una verificación especializada."
             ),
             technical_description=(
                 "ROBOT (Return Of Bleichenbacher's Oracle Threat) afecta implementaciones "
-                "de RSA PKCS#1 v1.5. La verificacion definitiva requiere herramientas "
+                "de RSA PKCS#1 v1.5. La verificación definitiva requiere herramientas "
                 "especializadas como testssl.sh o sslyze."
             ),
             recommendation=(
                 "Ejecutar herramientas especializadas (sslyze, testssl.sh) para confirmar. "
-                "Deshabilitar TLS 1.0/1.1 elimina los vectores mas comunes de explotacion."
+                "Deshabilitar TLS 1.0/1.1 elimina los vectores más comunes de explotación."
             ),
         )
     return None
@@ -392,8 +392,8 @@ def run(url, timeout=15):
             severity=SEVERITY_CRITICAL,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio se sirve sin cifrado. Toda la informacion entre los visitantes y "
-                "el sitio viaja en texto plano y puede ser interceptada en redes publicas."
+                "Su sitio se sirve sin cifrado. Toda la información entre los visitantes y "
+                "el sitio viaja en texto plano y puede ser interceptada en redes públicas."
             ),
             technical_description="La URL utiliza el esquema http://, sin TLS.",
             recommendation=(

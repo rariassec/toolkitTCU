@@ -135,7 +135,7 @@ def generate_final_report():
     )
     elements.append(
         Paragraph(
-            "Analisis Grafico",
+            "Análisis Gráfico",
             styles["Heading1"]
         )
     )
@@ -252,7 +252,7 @@ def generate_final_report():
         "IP Origen",
         "IP Destino",
         "Puerto",
-        "Pais",
+        "País",
         "Riesgo"
     ]]
 
@@ -317,7 +317,7 @@ def generate_final_report():
 
     elements.append(
         Paragraph(
-            "Conclusion",
+            "Conclusión",
             styles["Heading1"]
         )
     )
@@ -327,7 +327,7 @@ def generate_final_report():
     if risk_score >= 9:
         conclusion = (
             "La infraestructura presenta "
-            "un nivel CRITICO de riesgo. "
+            "un nivel CRÍTICO de riesgo. "
             "Se recomienda aplicar medidas "
             "correctivas inmediatas."
         )
@@ -335,12 +335,12 @@ def generate_final_report():
         conclusion = (
             "Se identificaron "
             "vulnerabilidades de alto impacto "
-            "que requieren atencion."
+            "que requieren atención."
         )
     elif risk_score >= 4:
         conclusion = (
             "La infraestructura presenta "
-            "un nivel moderado de exposicion. "
+            "un nivel moderado de exposición. "
             "Se recomienda fortalecer "
             "las medidas preventivas."
         )
@@ -383,7 +383,7 @@ def reporting_menu():
         from toolkitTCU.common.reports import save_module_report
         result = network_facade.build_module_result()
         json_path, pdf_path = save_module_report(
-            result, "reporte_red", "Reporte de Analisis de Red"
+            result, "reporte_red", "Reporte de Análisis de Red"
         )
         print(f"\n[+] Reporte de red guardado:")
         print(f"    JSON: {json_path}")

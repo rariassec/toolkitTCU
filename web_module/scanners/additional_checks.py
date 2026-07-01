@@ -72,14 +72,14 @@ def analyze_cookies(response):
             accessible_description=(
                 "Algunas cookies de su sitio no tienen el atributo Secure activado. Esto "
                 "significa que pueden ser enviadas por conexiones no cifradas y ser "
-                "interceptadas en redes publicas como WiFi gratuito."
+                "interceptadas en redes públicas como WiFi gratuito."
             ),
             technical_description=(
                 f"Cookies sin Secure: {', '.join(cookies_no_secure[:5])}"
-                + (f" (y {len(cookies_no_secure)-5} mas)" if len(cookies_no_secure) > 5 else "")
+                + (f" (y {len(cookies_no_secure)-5} más)" if len(cookies_no_secure) > 5 else "")
             ),
             recommendation=(
-                "Configurar todas las cookies con el atributo Secure. En la mayoria de "
+                "Configurar todas las cookies con el atributo Secure. En la mayoría de "
                 "frameworks esto se configura globalmente."
             ),
             evidence={"cookies": cookies_no_secure[:10]},
@@ -92,14 +92,14 @@ def analyze_cookies(response):
             severity=SEVERITY_MEDIUM,
             owasp_category="OWASP A05:2021 - Security Misconfiguration",
             accessible_description=(
-                "Algunas cookies pueden ser leidas por JavaScript en el navegador. Si su "
-                "sitio sufre un ataque XSS, las cookies de sesion podrian ser robadas."
+                "Algunas cookies pueden ser leídas por JavaScript en el navegador. Si su "
+                "sitio sufre un ataque XSS, las cookies de sesión podrían ser robadas."
             ),
             technical_description=(
                 f"Cookies sin HttpOnly: {', '.join(cookies_no_httponly[:5])}"
             ),
             recommendation=(
-                "Configurar el atributo HttpOnly en cookies de sesion y autenticacion."
+                "Configurar el atributo HttpOnly en cookies de sesión y autenticación."
             ),
             evidence={"cookies": cookies_no_httponly[:10]},
         ))
@@ -119,7 +119,7 @@ def analyze_cookies(response):
                 f"Cookies sin SameSite: {', '.join(cookies_no_samesite[:5])}"
             ),
             recommendation=(
-                "Configurar SameSite=Lax o SameSite=Strict segun el caso de uso."
+                "Configurar SameSite=Lax o SameSite=Strict según el caso de uso."
             ),
             evidence={"cookies": cookies_no_samesite[:10]},
         ))
@@ -169,7 +169,7 @@ def analyze_robots(base_url, timeout=10):
             accessible_description=(
                 "El archivo robots.txt de su sitio menciona rutas que parecen administrativas "
                 "o internas. Aunque robots.txt indica a los buscadores que no las indexen, "
-                "este archivo es publico y un atacante puede leerlo para descubrir secciones "
+                "este archivo es público y un atacante puede leerlo para descubrir secciones "
                 "sensibles."
             ),
             technical_description=(
@@ -178,7 +178,7 @@ def analyze_robots(base_url, timeout=10):
             ),
             recommendation=(
                 "No usar robots.txt para ocultar rutas administrativas. Proteger esas rutas "
-                "con autenticacion. Si una ruta es realmente sensible no debe ser accesible "
+                "con autenticación. Si una ruta es realmente sensible no debe ser accesible "
                 "ni siquiera conociendo su URL."
             ),
             evidence={"paths": sensitive_paths_found[:10], "url": robots_url},
@@ -223,7 +223,7 @@ def analyze_sitemap(base_url, timeout=10):
             accessible_description=(
                 "El mapa del sitio (sitemap.xml) lista URLs que parecen corresponder a "
                 "secciones internas o administrativas del sitio. Esto facilita a los "
-                "atacantes descubrir esas areas."
+                "atacantes descubrir esas áreas."
             ),
             technical_description=(
                 f"URLs potencialmente sensibles en sitemap: "
@@ -231,7 +231,7 @@ def analyze_sitemap(base_url, timeout=10):
             ),
             recommendation=(
                 "Excluir URLs administrativas o internas del sitemap.xml. Mantener en el "
-                "sitemap solo el contenido publico que se desea indexar."
+                "sitemap solo el contenido público que se desea indexar."
             ),
             evidence={"urls": sensitive_urls[:10], "total_sitemap_urls": len(urls)},
         ))
@@ -298,20 +298,20 @@ def detect_technologies(base_url, main_response, timeout=10):
         if cms_version:
             findings.append(create_finding(
                 finding_id="WEB-AD-020",
-                title=f"CMS expone su version: {cms_detected} {cms_version}",
+                title=f"CMS expone su versión: {cms_detected} {cms_version}",
                 severity=SEVERITY_LOW,
                 owasp_category="OWASP A05:2021 - Security Misconfiguration",
                 accessible_description=(
-                    f"Su sitio anuncia publicamente que usa {cms_detected} version "
+                    f"Su sitio anuncia públicamente que usa {cms_detected} versión "
                     f"{cms_version}. Esto facilita a un atacante buscar fallos conocidos "
-                    f"para esa version especifica."
+                    f"para esa versión específica."
                 ),
                 technical_description=(
-                    f"Version de {cms_detected} detectada en meta generator: {cms_version}"
+                    f"Versión de {cms_detected} detectada en meta generator: {cms_version}"
                 ),
                 recommendation=(
                     f"Eliminar el meta tag 'generator' del HTML. En {cms_detected} esto se "
-                    f"puede hacer con un plugin de seguridad o agregando codigo al theme."
+                    f"puede hacer con un plugin de seguridad o agregando código al theme."
                 ),
                 evidence={"cms": cms_detected, "version": cms_version},
             ))
@@ -332,11 +332,11 @@ def detect_technologies(base_url, main_response, timeout=10):
                     owasp_category="OWASP A01:2021 - Broken Access Control",
                     accessible_description=(
                         "Su sitio WordPress permite a cualquier persona obtener la lista de "
-                        "usuarios mediante una direccion publica. Esto facilita ataques "
-                        "dirigidos contra cuentas especificas."
+                        "usuarios mediante una dirección pública. Esto facilita ataques "
+                        "dirigidos contra cuentas específicas."
                     ),
                     technical_description=(
-                        "El endpoint /wp-json/wp/v2/users responde con codigo 200 y un "
+                        "El endpoint /wp-json/wp/v2/users responde con código 200 y un "
                         "arreglo JSON de usuarios."
                     ),
                     recommendation=(
@@ -352,20 +352,20 @@ def detect_technologies(base_url, main_response, timeout=10):
     if technologies_detected:
         findings.append(create_finding(
             finding_id="WEB-AD-029",
-            title="Tecnologias web detectadas",
+            title="Tecnologías web detectadas",
             severity=SEVERITY_INFO,
             owasp_category="OWASP A05:2021 - Security Misconfiguration",
             accessible_description=(
-                "Se identificaron las tecnologias usadas por su sitio. Esta informacion "
-                "es util como referencia, pero tambien lo es para un atacante. Mantenga "
-                "todas las tecnologias actualizadas a sus ultimas versiones."
+                "Se identificaron las tecnologías usadas por su sitio. Esta información "
+                "es útil como referencia, pero también lo es para un atacante. Mantenga "
+                "todas las tecnologías actualizadas a sus últimas versiones."
             ),
             technical_description=(
-                "Tecnologias detectadas a partir de headers, meta tags y rutas conocidas."
+                "Tecnologías detectadas a partir de headers, meta tags y rutas conocidas."
             ),
             recommendation=(
-                "Mantener todas las tecnologias actualizadas. Suscribirse a alertas de "
-                "seguridad para las versiones especificas en uso."
+                "Mantener todas las tecnologías actualizadas. Suscribirse a alertas de "
+                "seguridad para las versiones específicas en uso."
             ),
             evidence={"technologies": technologies_detected},
         ))

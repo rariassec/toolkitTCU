@@ -60,11 +60,11 @@ def evaluate_hsts(headers):
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
                 "Su sitio no instruye a los navegadores a forzar conexiones seguras (HTTPS). "
-                "Esto significa que un atacante podria interceptar la primera conexion de un "
+                "Esto significa que un atacante podría interceptar la primera conexión de un "
                 "usuario y degradarla a HTTP, exponiendo lo que escriba en el sitio."
             ),
             technical_description=(
-                "El header Strict-Transport-Security (HSTS) no esta presente en la respuesta. "
+                "El header Strict-Transport-Security (HSTS) no está presente en la respuesta. "
                 "HSTS instruye al navegador a comunicarse exclusivamente por HTTPS con el "
                 "dominio durante el periodo definido por max-age, mitigando ataques de "
                 "downgrade y SSL stripping."
@@ -92,7 +92,7 @@ def evaluate_hsts(headers):
                     owasp_category=OWASP_CATEGORY,
                     accessible_description=(
                         "El sitio fuerza HTTPS, pero por un periodo demasiado corto. Se "
-                        "recomienda extender este periodo para mayor proteccion."
+                        "recomienda extender este periodo para mayor protección."
                     ),
                     technical_description=(
                         f"HSTS presente con max-age={max_age}. Se recomienda al menos "
@@ -116,19 +116,19 @@ def evaluate_csp(headers):
             severity=SEVERITY_HIGH,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no tiene una politica que limite que tipo de contenido externo puede "
+                "Su sitio no tiene una política que limite que tipo de contenido externo puede "
                 "cargarse. Esto facilita ataques en los que un atacante inyecta scripts "
-                "maliciosos en el sitio (XSS) y roba informacion de los visitantes."
+                "maliciosos en el sitio (XSS) y roba información de los visitantes."
             ),
             technical_description=(
-                "El header Content-Security-Policy no esta presente. CSP es la principal "
-                "defensa en profundidad contra ataques XSS y de inyeccion de contenido. Define "
-                "que origenes son legitimos para scripts, estilos, imagenes, frames, etc."
+                "El header Content-Security-Policy no está presente. CSP es la principal "
+                "defensa en profundidad contra ataques XSS y de inyección de contenido. Define "
+                "que orígenes son legítimos para scripts, estilos, imágenes, frames, etc."
             ),
             recommendation=(
-                "Implementar una politica CSP restrictiva. Una base inicial podria ser: "
+                "Implementar una política CSP restrictiva. Una base inicial podría ser: "
                 "\"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' "
-                "data:; frame-ancestors 'self'\". Ajustar segun los recursos externos legitimos."
+                "data:; frame-ancestors 'self'\". Ajustar según los recursos externos legítimos."
             ),
             evidence={"header_present": False},
             resources=[
@@ -148,13 +148,13 @@ def evaluate_x_frame_options(headers):
             severity=SEVERITY_MEDIUM,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no impide que sea cargado dentro de otra pagina web mediante un "
-                "marco invisible. Esto permite ataques en los que un usuario cree que esta "
-                "haciendo clic en un sitio legitimo cuando en realidad esta interactuando "
+                "Su sitio no impide que sea cargado dentro de otra página web mediante un "
+                "marco invisible. Esto permite ataques en los que un usuario cree que está "
+                "haciendo clic en un sitio legítimo cuando en realidad está interactuando "
                 "con un sitio malicioso."
             ),
             technical_description=(
-                "El header X-Frame-Options no esta presente. Este header previene ataques de "
+                "El header X-Frame-Options no está presente. Este header previene ataques de "
                 "clickjacking restringiendo donde puede ser embebido el sitio mediante iframes."
             ),
             recommendation=(
@@ -167,12 +167,12 @@ def evaluate_x_frame_options(headers):
     if value.upper() not in ["DENY", "SAMEORIGIN"]:
         return create_finding(
             finding_id="WEB-HH-005",
-            title="Header X-Frame-Options con valor no estandar",
+            title="Header X-Frame-Options con valor no estándar",
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio tiene una proteccion contra clickjacking, pero el valor configurado "
-                "no es uno de los estandares reconocidos por todos los navegadores."
+                "Su sitio tiene una protección contra clickjacking, pero el valor configurado "
+                "no es uno de los estándares reconocidos por todos los navegadores."
             ),
             technical_description=(
                 f"X-Frame-Options presente con valor '{value}'. Los valores soportados de "
@@ -198,7 +198,7 @@ def evaluate_x_content_type_options(headers):
                 "maliciosos disfrazados como otros formatos."
             ),
             technical_description=(
-                "El header X-Content-Type-Options no esta presente. Sin este header, los "
+                "El header X-Content-Type-Options no está presente. Sin este header, los "
                 "navegadores aplican MIME-sniffing que puede inferir tipos distintos al "
                 "Content-Type declarado."
             ),
@@ -213,12 +213,12 @@ def evaluate_x_content_type_options(headers):
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "El header esta presente pero con un valor que no protege adecuadamente "
+                "El header está presente pero con un valor que no protege adecuadamente "
                 "contra ataques de tipo MIME-sniffing."
             ),
             technical_description=(
-                f"X-Content-Type-Options presente con valor '{value}'. El unico valor "
-                f"valido es 'nosniff'."
+                f"X-Content-Type-Options presente con valor '{value}'. El único valor "
+                f"válido es 'nosniff'."
             ),
             recommendation="Cambiar el valor a 'nosniff'.",
             evidence={"header_present": True, "value": value},
@@ -236,17 +236,17 @@ def evaluate_referrer_policy(headers):
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no controla que informacion se comparte cuando un usuario hace clic "
+                "Su sitio no controla que información se comparte cuando un usuario hace clic "
                 "en un enlace hacia otro sitio. Esto puede filtrar URLs internas o datos "
                 "sensibles a sitios de terceros."
             ),
             technical_description=(
-                "El header Referrer-Policy no esta presente. Sin esta politica, los "
-                "navegadores envian por defecto el referrer completo a destinos externos."
+                "El header Referrer-Policy no está presente. Sin esta política, los "
+                "navegadores envían por defecto el referrer completo a destinos externos."
             ),
             recommendation=(
                 "Configurar 'Referrer-Policy: strict-origin-when-cross-origin' o un valor "
-                "mas restrictivo como 'no-referrer'."
+                "más restrictivo como 'no-referrer'."
             ),
             evidence={"header_present": False},
         )
@@ -262,16 +262,16 @@ def evaluate_permissions_policy(headers):
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no restringe que funciones del navegador (camara, microfono, "
-                "ubicacion, etc.) pueden ser solicitadas. Definir esta politica reduce el "
+                "Su sitio no restringe que funciones del navegador (cámara, micrófono, "
+                "ubicación, etc.) pueden ser solicitadas. Definir esta política reduce el "
                 "impacto en caso de un ataque XSS."
             ),
             technical_description=(
-                "El header Permissions-Policy no esta presente. Este header permite habilitar "
-                "o deshabilitar APIs del navegador como geolocalizacion, camara, microfono, etc."
+                "El header Permissions-Policy no está presente. Este header permite habilitar "
+                "o deshabilitar APIs del navegador como geolocalización, cámara, micrófono, etc."
             ),
             recommendation=(
-                "Definir una politica restrictiva. Ejemplo: "
+                "Definir una política restrictiva. Ejemplo: "
                 "'Permissions-Policy: geolocation=(), microphone=(), camera=()'."
             ),
             evidence={"header_present": False},
@@ -285,20 +285,20 @@ def evaluate_server_disclosure(headers):
     if x_powered_by:
         return create_finding(
             finding_id="WEB-HH-010",
-            title="Header X-Powered-By revela tecnologia del servidor",
+            title="Header X-Powered-By revela tecnología del servidor",
             severity=SEVERITY_INFO,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su servidor anuncia publicamente que tecnologia usa. Aunque no es una "
-                "vulnerabilidad por si misma, facilita a un atacante identificar fallos "
-                "conocidos para esa version especifica."
+                "Su servidor anuncia públicamente que tecnología usa. Aunque no es una "
+                "vulnerabilidad por sí misma, facilita a un atacante identificar fallos "
+                "conocidos para esa versión específica."
             ),
             technical_description=(
-                f"El header X-Powered-By esta presente con valor '{x_powered_by}'. Este "
-                f"header divulga informacion sobre la pila tecnologica del servidor."
+                f"El header X-Powered-By está presente con valor '{x_powered_by}'. Este "
+                f"header divulga información sobre la pila tecnológica del servidor."
             ),
             recommendation=(
-                "Eliminar el header X-Powered-By en la configuracion del servidor o framework "
+                "Eliminar el header X-Powered-By en la configuración del servidor o framework "
                 "(en PHP: 'expose_php = Off' en php.ini)."
             ),
             evidence={"x_powered_by": x_powered_by, "server": server},

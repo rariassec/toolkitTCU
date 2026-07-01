@@ -28,8 +28,8 @@ MODULE_NETWORK = "network"
 MODULE_INTEGRITY = "integrity"
 
 MODULE_DISPLAY_NAMES = {
-    MODULE_WEB: "Analisis Web",
-    MODULE_NETWORK: "Analisis de Red",
+    MODULE_WEB: "Análisis Web",
+    MODULE_NETWORK: "Análisis de Red",
     MODULE_INTEGRITY: "Integridad de Archivos",
 }
 

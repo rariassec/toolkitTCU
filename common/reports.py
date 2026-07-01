@@ -67,7 +67,7 @@ def save_pdf_report(report, prefix, title="Reporte de seguridad"):
     resumen_data = [
         ["Puntaje global", f"{summary.get('global_score', '-')}/100"],
         ["Total de hallazgos", str(summary.get("total_findings", 0))],
-        ["Criticos / Altos", f"{counts.get('CRITICAL', 0)} / {counts.get('HIGH', 0)}"],
+        ["Críticos / Altos", f"{counts.get('CRITICAL', 0)} / {counts.get('HIGH', 0)}"],
         ["Medios / Bajos / Info",
          f"{counts.get('MEDIUM', 0)} / {counts.get('LOW', 0)} / {counts.get('INFO', 0)}"],
     ]
@@ -94,7 +94,7 @@ def save_pdf_report(report, prefix, title="Reporte de seguridad"):
             story.append(Paragraph(resumen, small))
         findings = F.sort_findings(result.get("findings", []))
         if not findings:
-            story.append(Paragraph("Sin hallazgos en este modulo.", body))
+            story.append(Paragraph("Sin hallazgos en este módulo.", body))
         for f in findings:
             sev = f.get("severity", "INFO")
             color = _SEVERITY_COLORS.get(sev, colors.black)
@@ -106,7 +106,7 @@ def save_pdf_report(report, prefix, title="Reporte de seguridad"):
             if f.get("description"):
                 story.append(Paragraph(f["description"], body))
             if f.get("recommendation"):
-                story.append(Paragraph(f"Recomendacion: {f['recommendation']}", body))
+                story.append(Paragraph(f"Recomendación: {f['recommendation']}", body))
         story.append(Spacer(1, 14))
 
     doc.build(story)

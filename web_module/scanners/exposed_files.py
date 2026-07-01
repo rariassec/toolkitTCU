@@ -152,33 +152,33 @@ def build_finding_for_file(info, path):
         title = f"Ruta sensible detectada (acceso protegido): {path}"
 
     accessible_description = (
-        f"Se detecto en su sitio el archivo o directorio '{path}'. Este tipo de archivo "
-        f"suele contener informacion interna que no deberia estar visible publicamente."
+        f"Se detectó en su sitio el archivo o directorio '{path}'. Este tipo de archivo "
+        f"suele contener información interna que no debería estar visible públicamente."
     )
 
     if ".env" in path or "config" in path.lower():
         accessible_description = (
-            f"Su sitio expone publicamente el archivo de configuracion '{path}'. Estos "
-            f"archivos suelen contener contrasenas, claves de acceso a bases de datos y "
+            f"Su sitio expone públicamente el archivo de configuración '{path}'. Estos "
+            f"archivos suelen contener contraseñas, claves de acceso a bases de datos y "
             f"credenciales de servicios externos. Cualquier persona con la URL puede leerlo."
         )
     elif ".git" in path or ".svn" in path:
         accessible_description = (
-            f"Su sitio expone parte del repositorio de codigo fuente ('{path}'). Esto "
-            f"permite a un atacante reconstruir el codigo de su sitio e identificar fallos "
+            f"Su sitio expone parte del repositorio de código fuente ('{path}'). Esto "
+            f"permite a un atacante reconstruir el código de su sitio e identificar fallos "
             f"de seguridad para explotarlos."
         )
     elif "backup" in path or ".sql" in path or ".zip" in path or ".tar" in path:
         accessible_description = (
-            f"Se detecto un archivo de respaldo accesible publicamente ('{path}'). Estos "
+            f"Se detectó un archivo de respaldo accesible públicamente ('{path}'). Estos "
             f"archivos suelen contener una copia completa de la base de datos o del sitio, "
-            f"con todos los datos de usuarios, contrasenas y contenido."
+            f"con todos los datos de usuarios, contraseñas y contenido."
         )
 
     recommendation = (
-        f"1. Eliminar inmediatamente el archivo '{path}' del directorio publico del sitio.\n"
-        f"2. Si contiene credenciales, rotar todas las que esten en el archivo.\n"
-        f"3. Configurar el servidor web para denegar el acceso a archivos de configuracion "
+        f"1. Eliminar inmediatamente el archivo '{path}' del directorio público del sitio.\n"
+        f"2. Si contiene credenciales, rotar todas las que estén en el archivo.\n"
+        f"3. Configurar el servidor web para denegar el acceso a archivos de configuración "
         f"y archivos ocultos (que inician con punto)."
     )
 
@@ -190,8 +190,8 @@ def build_finding_for_file(info, path):
         accessible_description=accessible_description,
         technical_description=(
             f"URL detectada: {info['url']}\n"
-            f"Codigo HTTP: {info['status_code']}\n"
-            f"Tamano respuesta: {info['size']} bytes\n"
+            f"Código HTTP: {info['status_code']}\n"
+            f"Tamaño respuesta: {info['size']} bytes\n"
             f"Content-Type: {info['content_type']}"
         ),
         recommendation=recommendation,

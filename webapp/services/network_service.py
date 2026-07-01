@@ -370,7 +370,7 @@ def save_report():
 
     result = network_facade.build_module_result()
     json_path, pdf_path = save_module_report(
-        result, "reporte_red", "Reporte de Analisis de Red")
+        result, "reporte_red", "Reporte de Análisis de Red")
     return {
         "ok": True,
         "json": os.path.basename(json_path),

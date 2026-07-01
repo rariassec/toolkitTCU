@@ -221,13 +221,13 @@ def build_findings_for_document(url, metadata):
     if author:
         findings.append(create_finding(
             finding_id=f"WEB-MD-{abs(hash(url + 'author')) % 1000:03d}",
-            title="Documento publico expone nombre de autor",
+            title="Documento público expone nombre de autor",
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
                 f"Un documento publicado en su sitio incluye el nombre de su autor "
-                f"('{author}'). Esta informacion puede ser util para ataques de "
-                f"ingenieria social dirigidos a esa persona."
+                f"('{author}'). Esta información puede ser útil para ataques de "
+                f"ingeniería social dirigidos a esa persona."
             ),
             technical_description=(
                 f"El documento {url} contiene metadatos de autor: '{author}'."
@@ -245,13 +245,13 @@ def build_findings_for_document(url, metadata):
         if version_match:
             findings.append(create_finding(
                 finding_id=f"WEB-MD-{abs(hash(url + 'sw')) % 1000:03d}",
-                title="Documento revela version de software de creacion",
+                title="Documento revela versión de software de creación",
                 severity=SEVERITY_INFO,
                 owasp_category=OWASP_CATEGORY,
                 accessible_description=(
-                    f"Un documento publicado contiene informacion sobre el software con que "
+                    f"Un documento publicado contiene información sobre el software con que "
                     f"fue creado ('{software}'). Esto puede ayudar a un atacante a perfilar "
-                    f"el entorno tecnologico de la organizacion."
+                    f"el entorno tecnológico de la organización."
                 ),
                 technical_description=f"Software detectado: {software}",
                 recommendation="Limpiar metadatos antes de publicar documentos.",
@@ -268,15 +268,15 @@ def build_findings_for_document(url, metadata):
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
                 f"Un documento publicado contiene rutas de archivos internos de la "
-                f"computadora donde se creo (por ejemplo: {examples}). Esto revela "
-                f"detalles del entorno de trabajo de la organizacion."
+                f"computadora donde se creó (por ejemplo: {examples}). Esto revela "
+                f"detalles del entorno de trabajo de la organización."
             ),
             technical_description=(
                 f"Se detectaron {len(paths)} rutas internas en metadatos del documento."
             ),
             recommendation=(
                 "Antes de publicar documentos, eliminar metadatos. En PDF utilizar la "
-                "opcion 'Sanitizar documento' de Acrobat o herramientas como exiftool."
+                "opción 'Sanitizar documento' de Acrobat o herramientas como exiftool."
             ),
             evidence={"url": url, "detected_paths": paths[:5]},
         ))
@@ -306,15 +306,15 @@ def run(url, max_documents=10, max_pages=15, timeout=10):
         result["status"] = STATUS_COMPLETED
         result["findings"].append(create_finding(
             finding_id="WEB-MD-000",
-            title="No se detectaron documentos publicos en el crawling",
+            title="No se detectaron documentos públicos en el crawling",
             severity=SEVERITY_INFO,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "El analisis no encontro documentos publicos (PDF, DOCX, XLSX) accesibles "
-                "desde la pagina principal. Esto no significa que no existan; el crawling "
+                "El análisis no encontró documentos públicos (PDF, DOCX, XLSX) accesibles "
+                "desde la página principal. Esto no significa que no existan; el crawling "
                 "es limitado."
             ),
-            technical_description="El crawler no encontro enlaces a documentos en las paginas analizadas.",
+            technical_description="El crawler no encontró enlaces a documentos en las páginas analizadas.",
             recommendation="Si su sitio aloja documentos, verificar manualmente sus metadatos.",
         ))
         result["score"] = calculate_score(result["findings"])
