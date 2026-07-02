@@ -28,7 +28,7 @@ def _findings_from_vulnerabilities():
                 f"por la vulnerabilidad {cve} (CVSS {vuln.get('score')})."
             ),
             recommendation=(
-                "Actualice o parchee el servicio afectado a una version sin la "
+                "Actualice o parchee el servicio afectado a una versión sin la "
                 "vulnerabilidad, o restrinja el acceso al puerto."
             ),
             evidence={
@@ -51,17 +51,17 @@ def _findings_from_suspicious_connections():
         out.append(F.create_finding(
             module=F.MODULE_NETWORK,
             finding_id=f"NET-CONN-{i}",
-            title=f"Conexion saliente sospechosa a {conn.get('dst_ip')}:{conn.get('port')}",
+            title=f"Conexión saliente sospechosa a {conn.get('dst_ip')}:{conn.get('port')}",
             severity=risk,
-            category="Conexion sospechosa",
+            category="Conexión sospechosa",
             description=(
-                f"Conexion {conn.get('protocol')} desde {conn.get('src_ip')} "
+                f"Conexión {conn.get('protocol')} desde {conn.get('src_ip')} "
                 f"hacia {conn.get('dst_ip')}:{conn.get('port')} "
-                f"(pais: {conn.get('country')}, maliciosa: {conn.get('malicious')})."
+                f"(país: {conn.get('country')}, maliciosa: {conn.get('malicious')})."
             ),
             recommendation=(
-                "Verifique el proceso que origina la conexion y bloquee el "
-                "destino si no corresponde a trafico legitimo."
+                "Verifique el proceso que origina la conexión y bloquee el "
+                "destino si no corresponde a tráfico legítimo."
             ),
             evidence={
                 "destino": f"{conn.get('dst_ip')}:{conn.get('port')}",
@@ -85,17 +85,17 @@ def _findings_from_dns():
         out.append(F.create_finding(
             module=F.MODULE_NETWORK,
             finding_id=f"NET-DNS-{i}",
-            title=f"Resolucion DNS de riesgo: {entry.get('value')}",
+            title=f"Resolución DNS de riesgo: {entry.get('value')}",
             severity=severity,
-            category="Analisis DNS",
+            category="Análisis DNS",
             description=(
                 f"La consulta {entry.get('type')} de '{entry.get('value')}' "
-                f"resolvio a '{entry.get('resolved')}'. "
+                f"resolvió a '{entry.get('resolved')}'. "
                 f"IP maliciosa: {entry.get('ip_malicious')}, "
                 f"dominio sospechoso: {entry.get('suspicious')}."
             ),
             recommendation=(
-                "Evite comunicarse con el dominio/IP y revise por que un equipo "
+                "Evite comunicarse con el dominio/IP y revise por qué un equipo "
                 "intenta resolver este nombre."
             ),
             evidence={
@@ -122,15 +122,15 @@ def _findings_from_exposed_services():
         out.append(F.create_finding(
             module=F.MODULE_NETWORK,
             finding_id=f"NET-SVC-{entry.get('ip')}-{entry.get('port')}",
-            title=f"Servicio critico expuesto: {service} en {entry.get('ip')}:{entry.get('port')}",
+            title=f"Servicio crítico expuesto: {service} en {entry.get('ip')}:{entry.get('port')}",
             severity=F.SEVERITY_MEDIUM,
             category="Servicio expuesto",
             description=(
-                f"El servicio critico '{service}' ({entry.get('version')}) esta "
+                f"El servicio crítico '{service}' ({entry.get('version')}) está "
                 f"abierto en {entry.get('ip')}:{entry.get('port')} ({entry.get('protocol')})."
             ),
             recommendation=(
-                "Confirme que la exposicion del servicio es necesaria y "
+                "Confirme que la exposición del servicio es necesaria y "
                 "restrinja el acceso mediante firewall si corresponde."
             ),
             evidence={

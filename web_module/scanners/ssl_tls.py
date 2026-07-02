@@ -194,7 +194,7 @@ def evaluate_protocols(host, port, timeout=10):
     findings = []
     supported = {}
 
-    for name, versión in PROTOCOLS_TO_TEST.items():
+    for name, version in PROTOCOLS_TO_TEST.items():
         supported[name] = test_protocol(host, port, version, timeout)
 
     if supported.get("SSLv3"):

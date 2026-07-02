@@ -6,17 +6,17 @@ from toolkitTCU.integrity_module.core.DatabaseManager import DatabaseManager
 _RELEVANT_EVENTS = {"CREATED", "MODIFIED", "DELETED"}
 
 _EVENT_DESCRIPTION = {
-    "CREATED": "Se creo un archivo nuevo en una ruta monitoreada.",
-    "MODIFIED": "Se modifico el contenido de un archivo monitoreado.",
-    "DELETED": "Se elimino un archivo monitoreado.",
+    "CREATED": "Se creó un archivo nuevo en una ruta monitoreada.",
+    "MODIFIED": "Se modificó el contenido de un archivo monitoreado.",
+    "DELETED": "Se eliminó un archivo monitoreado.",
 }
 
 _EVENT_RECOMMENDATION = {
-    "CREATED": "Verifique que la creacion del archivo sea legitima; si no, "
+    "CREATED": "Verifique que la creación del archivo sea legítima; si no, "
                "investigue su origen.",
     "MODIFIED": "Confirme que el cambio fue autorizado; de lo contrario, "
                 "restaure desde respaldo e investigue.",
-    "DELETED": "Confirme que la eliminacion fue intencional; de lo contrario, "
+    "DELETED": "Confirme que la eliminación fue intencional; de lo contrario, "
                "restaure desde respaldo e investigue.",
 }
 

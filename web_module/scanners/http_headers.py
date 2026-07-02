@@ -116,14 +116,14 @@ def evaluate_csp(headers):
             severity=SEVERITY_HIGH,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no tiene una política que limite que tipo de contenido externo puede "
+                "Su sitio no tiene una política que limite qué tipo de contenido externo puede "
                 "cargarse. Esto facilita ataques en los que un atacante inyecta scripts "
                 "maliciosos en el sitio (XSS) y roba información de los visitantes."
             ),
             technical_description=(
                 "El header Content-Security-Policy no está presente. CSP es la principal "
                 "defensa en profundidad contra ataques XSS y de inyección de contenido. Define "
-                "que orígenes son legítimos para scripts, estilos, imágenes, frames, etc."
+                "qué orígenes son legítimos para scripts, estilos, imágenes, frames, etc."
             ),
             recommendation=(
                 "Implementar una política CSP restrictiva. Una base inicial podría ser: "
@@ -155,7 +155,7 @@ def evaluate_x_frame_options(headers):
             ),
             technical_description=(
                 "El header X-Frame-Options no está presente. Este header previene ataques de "
-                "clickjacking restringiendo donde puede ser embebido el sitio mediante iframes."
+                "clickjacking restringiendo dónde puede ser embebido el sitio mediante iframes."
             ),
             recommendation=(
                 "Configurar 'X-Frame-Options: DENY' o 'SAMEORIGIN'. Si ya se utiliza CSP con "
@@ -236,7 +236,7 @@ def evaluate_referrer_policy(headers):
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no controla que información se comparte cuando un usuario hace clic "
+                "Su sitio no controla qué información se comparte cuando un usuario hace clic "
                 "en un enlace hacia otro sitio. Esto puede filtrar URLs internas o datos "
                 "sensibles a sitios de terceros."
             ),
@@ -262,7 +262,7 @@ def evaluate_permissions_policy(headers):
             severity=SEVERITY_LOW,
             owasp_category=OWASP_CATEGORY,
             accessible_description=(
-                "Su sitio no restringe que funciones del navegador (cámara, micrófono, "
+                "Su sitio no restringe qué funciones del navegador (cámara, micrófono, "
                 "ubicación, etc.) pueden ser solicitadas. Definir esta política reduce el "
                 "impacto en caso de un ataque XSS."
             ),

@@ -111,7 +111,7 @@ def analyze_cookies(response):
             severity=SEVERITY_LOW,
             owasp_category="OWASP A05:2021 - Security Misconfiguration",
             accessible_description=(
-                "Algunas cookies no especifican como deben comportarse cuando se accede al "
+                "Algunas cookies no especifican cómo deben comportarse cuando se accede al "
                 "sitio desde otro dominio. Esto puede facilitar ataques en los que un usuario "
                 "logueado realiza acciones sin saberlo (CSRF)."
             ),
